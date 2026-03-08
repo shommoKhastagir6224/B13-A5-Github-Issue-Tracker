@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- font goggle link  -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Hind+Siliguri:wght@300;400;500;600;700&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- daisy ui link  -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+    <title>GitHub LogIn page</title>
+    <link rel="shortcut icon" href="./assets/github-logo.png" type="image/x-icon">
+
+    <!-- css -->
+    <style>
+        * {
+            font-family: "Work Sans", sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="max-w-6/12  mx-auto max-h-auto flex flex-col items-center gap-8 my-[105px] py-[50px] shadow-xl">
+        <div>
+            <img src="./assets/github-logo.png" alt="">
+        </div>
+        <div>
+            <h1 class="text-4xl font-semibold">GitHub Issues Tracker</h1>
+            <p class="text-xl text-gray-600 text-center py-3">Sign in to manage your issues</p>
+        </div>
+        <div>
+            <fieldset class="fieldset rounded-box min-w-xl  gap-3 text-[22px]">
+
+                <label class="label  text-black">Username :</label>
+                <input type="email" id="inputName" class="input w-full text-[18px] rounded-lg outline-none"
+                    placeholder="Enter Username" />
+                <p class="text-[16px] text-blue-700">Default: admin</p>
+
+                <label class="label text-black">Password :</label>
+                <input type="password" id="input-pin" class="input w-full text-[18px] rounded-lg outline-none"
+                    placeholder="Enter Password" />
+                <p class="text-[16px] text-blue-700">Default: admin123</p>
+
+
+                <button class="btn btn-primary mt-4 text-lg" id="login-btn">Sign In</button>
+
+                <div class="text-center">
+
+                    <p class=" py-6">OR </p>
+                    <p class="text-xl text-gray-600">
+                        Demo Credentials :
+                    </p>
+                    <div class="py-[50px] bg-gray-100 rounded-xl my-5 text-[22px]">
+                        <p>Username: admin</p>
+                        <p>Password: admin123</p>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    <dialog id="issue_modal" class="modal">
+
+        <div class="modal-box max-w-2xl">
+
+            <div id="details-container"></div>
+
+            <div class="modal-action">
+                <form method="dialog">
+                    <button class="btn btn-primary">Close</button>
+                </form>
+            </div>
+
+        </div>
+
+    </dialog>
+    <!-- <script src="./Script/login.js"></script> -->
+</body>
+
+</html>
