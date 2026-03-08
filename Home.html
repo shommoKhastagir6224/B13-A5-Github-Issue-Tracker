@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- font goggle link  -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Hind+Siliguri:wght@300;400;500;600;700&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- daisy ui link  -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+
+    <title>GitHub Issues Tracker</title>
+    <link rel="shortcut icon" href="./assets/github-logo.png" type="image/x-icon">
+
+    <style>
+        * {
+            font-family: "Work Sans", sans-serif;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <div class="navbar bg-base-100 shadow-md bg-white">
+
+        <div class="flex-1">
+            <a class="btn btn-ghost text-2xl">GitHub Issues Tracker</a>
+        </div>
+
+        <div class="flex gap-2">
+
+            <div>
+                <input id="input-search" type="text" placeholder="Search issues"
+                    class="input input-bordered border-gray-300 w-32 outline-none md:w-auto" />
+            </div>
+
+            <button id="btn-search" class="btn text-white btn-primary text-lg">
+                Search
+            </button>
+
+            <button class="btn bg-blue-900 shadow-md text-white text-[20px]">
+                <span class="text-[24px]">+</span>New Issue
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- FILTER BUTTONS -->
+
+    <div class="w-10/12 mx-auto shadow-md rounded-xl mt-15 bg-gray-50">
+
+        <div class="join p-6 gap-6 ">
+
+            <input id="btn-all" class="join-item btn w-24 text-lg issue-btn" type="radio" name="options"
+                aria-label="All" checked />
+
+            <input id="btn-open" class="join-item btn w-24 text-lg issue-btn" type="radio" name="options"
+                aria-label="Open" />
+
+            <input id="btn-close" class="join-item btn w-24 text-lg issue-btn" type="radio" name="options"
+                aria-label="Closed" />
+
+        </div>
+
+    </div>
+
+    <!-- ISSUE SUMMARY -->
+
+    <div class="w-10/12 mx-auto shadow-md rounded-xl mt-8 bg-gray-400">
+
+        <div class="navbar bg-base-100 shadow-sm flex justify-between p-10">
+
+            <div class="flex items-center gap-6">
+
+                <div class="p-2 rounded-full bg-purple-200">
+                    <img src="./assets/Aperture.png" class="w-10">
+                </div>
+
+                <div class="text-xl flex-col">
+
+                    <p class="text-[25px] font-semibold">
+                        <span id="count-all">0</span> Issues
+                    </p>
+
+                    <p class="text-gray-500">
+                        Track and manage your project issues
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="flex-none">
+
+                <ul class="menu menu-horizontal px-1">
+
+                    <li class="flex flex-row text-lg items-center gap-2">
+                        <i class="fa-solid fa-circle text-green-600"></i>
+                        <p>Open (<span id="count-open">0</span>)</p>
+                    </li>
+
+                    <li class="flex flex-row text-lg items-center gap-2">
+                        <i class="fa-solid fa-circle text-fuchsia-700"></i>
+                        <p>Closed (<span id="count-close">0</span>)</p>
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SPINNER -->
+
+    <div id="spinner" class="text-center py-10 hidden">
+        <span class="loading loading-spinner loading-lg"></span>
+    </div>
+
+
+    <!-- ISSUE CONTAINER -->
+
+    <div id="issue-container" class="w-10/12 mx-auto mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    </div>
+
+
+
+    <!-- ISSUE DETAILS MODAL -->
+
+    <dialog id="issue_modal" class="modal">
+
+        <div class="modal-box">
+
+            <div id="details-container"></div>
+
+            <div class="modal-action">
+
+                <form method="dialog">
+                    <button class="btn">Close</button>
+                </form>
+
+            </div>
+
+        </div>
+
+    </dialog>
+
+
+
+    <!-- JS FILE -->
+
+    <script src="./Script/machine.js"></script>
+
+</body>
+
+</html>
