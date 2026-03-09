@@ -6,7 +6,9 @@ function login() {
 
     if (inputNumber === "admin" && inputPin === "admin123") {
         alert("Login successful");
-        window.location.assign("../home.html");
+        // window.location.assign("../home.html");
+        window.location.assign("https://shommokhastagir6224.github.io/B13-A5-Github-Issue-Tracker/home.html");
+
     } else {
         alert("Invalid credentials");
         return
