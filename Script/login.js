@@ -3,7 +3,6 @@ console.log("login functionality coming soon....");
 function login() {
     const inputNumber = document.getElementById("inputName").value;
     const inputPin = document.getElementById("input-pin").value;
-    console.log(inputNumber, inputPin);
 
     if (inputNumber === "admin" && inputPin === "admin123") {
         alert("Login successful");
