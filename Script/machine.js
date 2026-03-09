@@ -1,63 +1,90 @@
+// store all issues from API
 let allIssues = [];
 
-// spinner control
+
+// =======================
+// Spinner Control
+// =======================
 const manageSpinner = (status) => {
+
     const spinner = document.getElementById("spinner");
     const container = document.getElementById("issue-container");
 
     if (status) {
+        // show spinner
         spinner.classList.remove("hidden");
         container.classList.add("hidden");
     } else {
+        // hide spinner
         spinner.classList.add("hidden");
         container.classList.remove("hidden");
     }
 };
 
-// remove active button
+
+// =======================
+// Remove active button style
+// =======================
 const removeActive = () => {
+
     const buttons = document.querySelectorAll(".issue-btn");
+
     buttons.forEach(btn => btn.classList.remove("active"));
+
 };
 
-// load all issues
+
+// =======================
+// Load all issues from API
+// =======================
 const loadIssues = async () => {
 
-    manageSpinner(true);
+    manageSpinner(true); // start loading
 
     const res = await fetch("https://phi-lab-server.vercel.app/api/v1/lab/issues");
+
     const data = await res.json();
 
+    // store all issues
     allIssues = data.data;
 
-    updateCounts();
+    updateCounts(); // update issue numbers
 
-    displayIssues(allIssues);
+    displayIssues(allIssues); // show all issues
 
-    manageSpinner(false);
+    manageSpinner(false); // stop loading
+
 };
 
-// update issue counts
+
+// =======================
+// Update issue counts
+// =======================
 const updateCounts = () => {
 
     const openIssues = allIssues.filter(issue => issue.status === "open");
+
     const closeIssues = allIssues.filter(issue => issue.status === "closed");
 
     document.getElementById("count-all").innerText = allIssues.length;
+
     document.getElementById("count-open").innerText = openIssues.length;
+
     document.getElementById("count-close").innerText = closeIssues.length;
 
 };
 
-// display issues
+
+// =======================
+// Display Issues as Cards
+// =======================
 const displayIssues = (issues) => {
 
     const container = document.getElementById("issue-container");
 
     container.innerHTML = "";
-    
-    document.getElementById("count-all").innerText = issues.length;
 
+    // if no issue found
     if (issues.length === 0) {
 
         container.innerHTML = `
@@ -69,57 +96,70 @@ const displayIssues = (issues) => {
         return;
     }
 
+    // create card for each issue
     issues.forEach(issue => {
 
         const card = document.createElement("div");
 
+        // border color for open issues
         const borderColor = issue.status === "open"
             ? "border-green-500"
-            : "text-fuchsia-700";
+            : "border-gray-300";
 
+        // title color for closed issues
         const titleColor = issue.status === "closed"
             ? "text-fuchsia-700"
             : "text-gray-800";
 
-        const statusBadge = issue.status === "open"
-            ? `<span class="bg-green-100 text-green-600 px-3 py-1 rounded-full text-sm font-semibold">Opened</span>`
-            : `<span class="bg-gray-200 text-fuchsia-700 px-3 py-1 rounded-full text-sm font-semibold">Closed</span>`;
+        // show different image based on status
+        const statusImage = issue.status === "open"
+            ? "Open-Status.png"
+            : "close.png";
+
 
         card.innerHTML = `
-        
+
         <div onclick="loadSingleIssue(${issue.id})"
         class="cursor-pointer bg-white rounded-xl shadow-md border-t-4 ${borderColor} p-6 space-y-4 hover:shadow-lg transition">
 
             <div class="flex justify-between items-center">
 
-                <div class="w-12 h-12 flex items-center justify-center bg-green-100 rounded-full">
-                <i class="fa-solid fa-circle text-green-600 text-xl"></i>
+                <!-- status image -->
+                <div class="w-12 h-12">
+                    <img src="./images/${statusImage}" class="w-full h-full object-contain">
                 </div>
 
-                ${statusBadge}
+                <!-- priority badge -->
+                <div class="bg-red-100 text-red-500 px-5 py-2 rounded-full font-semibold">
+                HIGH
+                </div>
 
             </div>
 
+            <!-- issue title -->
             <h2 class="text-2xl font-semibold ${titleColor}">
             ${issue.title}
             </h2>
 
+            <!-- issue description -->
             <p class="text-gray-500">
             ${issue.description}
             </p>
 
+            <!-- tags -->
             <div class="flex gap-3">
 
             <span class="px-4 py-2 rounded-full bg-red-100 text-red-500 font-medium">
-            <i class="fa-regular fa-calendar"></i> BUG
+            BUG
             </span>
 
             <span class="px-4 py-2 rounded-full bg-yellow-100 text-yellow-600 font-medium">
-            <i class="fa-regular fa-face-smile"></i> HELP WANTED
+            HELP WANTED
             </span>
 
             </div>
 
+            <!-- issue info -->
             <div class="border-t pt-4 text-gray-500 flex flex-col gap-1">
 
             <p>#${issue.id} by john_doe</p>
@@ -129,15 +169,19 @@ const displayIssues = (issues) => {
             </div>
 
         </div>
-        
+
         `;
 
         container.append(card);
 
     });
+
 };
 
-// filter all
+
+// =======================
+// Filter ALL issues
+// =======================
 document.getElementById("btn-all").addEventListener("click", () => {
 
     removeActive();
@@ -148,7 +192,10 @@ document.getElementById("btn-all").addEventListener("click", () => {
 
 });
 
-// filter open
+
+// =======================
+// Filter OPEN issues
+// =======================
 document.getElementById("btn-open").addEventListener("click", () => {
 
     removeActive();
@@ -161,7 +208,10 @@ document.getElementById("btn-open").addEventListener("click", () => {
 
 });
 
-// filter close
+
+// =======================
+// Filter CLOSED issues
+// =======================
 document.getElementById("btn-close").addEventListener("click", () => {
 
     removeActive();
@@ -174,7 +224,10 @@ document.getElementById("btn-close").addEventListener("click", () => {
 
 });
 
-// load single issue
+
+// =======================
+// Load Single Issue Modal
+// =======================
 const loadSingleIssue = async (id) => {
 
     const url = `https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`;
@@ -187,41 +240,26 @@ const loadSingleIssue = async (id) => {
 
     const detailsBox = document.getElementById("details-container");
 
-    const statusColor = issue.status === "open"
-        ? "text-green-600"
-        : "text-gray-600";
-
+    // show issue details in modal
     detailsBox.innerHTML = `
 
-    <h2 class="text-3xl font-semibold mb-3 mt-10">${issue.title}</h2>
+    <h2 class="text-2xl font-bold mb-3">${issue.title}</h2>
 
-    <p class="mb-5 text-gray-600">${issue.description}</p>
+    <p class="mb-4">${issue.description}</p>
 
-    <div class="flex justify-between bg-gray-100 p-4 rounded-lg">
-
-        <div>
-        <p class="text-gray-500">Assignee:</p>
-        <p class="font-semibold">Fahim Ahmed</p>
-        </div>
-
-        <div>
-        <p class="text-gray-500">Priority:</p>
-        <span class="bg-red-500 text-white px-3 py-1 rounded-full text-sm">HIGH</span>
-        </div>
-
-    </div>
-
-    <p class="mt-4 mb-10 font-semibold ${statusColor}">
-    Status : ${issue.status}
-    </p>
+    <p class="font-semibold">Status : ${issue.status}</p>
 
     `;
 
+    // open modal
     document.getElementById("issue_modal").showModal();
 
 };
 
-// search issue
+
+// =======================
+// Search Issue
+// =======================
 document.getElementById("btn-search").addEventListener("click", async () => {
 
     const input = document.getElementById("input-search");
@@ -238,5 +276,8 @@ document.getElementById("btn-search").addEventListener("click", async () => {
 
 });
 
-// initial load
+
+// =======================
+// Initial Load
+// =======================
 loadIssues();
