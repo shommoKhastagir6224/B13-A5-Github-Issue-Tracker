@@ -200,7 +200,7 @@ const loadSingleIssue = async (id) => {
         
         <div class="flex gap-[6px] items-center  flex-wrap">
         
-        <p class="text-base rounded-full bg-green-300 py-1 px-5 flex items-center justify-center font-semibold ${statusColor}">
+        <p class="text-base rounded-full  py-1 px-5 flex items-center justify-center font-semibold ${statusColor}">
         ${issue.status}
         </p>
         
