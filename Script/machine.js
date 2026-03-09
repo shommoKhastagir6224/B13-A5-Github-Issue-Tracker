@@ -1,92 +1,62 @@
-// store all issues from API
 let allIssues = [];
 
-
-// =======================
-// Spinner Control
-// =======================
+// spinner control
 const manageSpinner = (status) => {
-
     const spinner = document.getElementById("spinner");
     const container = document.getElementById("issue-container");
 
     if (status) {
-        // show spinner
         spinner.classList.remove("hidden");
         container.classList.add("hidden");
     } else {
-        // hide spinner
         spinner.classList.add("hidden");
         container.classList.remove("hidden");
     }
 };
 
-
-// =======================
-// Remove active button style
-// =======================
+// remove active button
 const removeActive = () => {
-
     const buttons = document.querySelectorAll(".issue-btn");
-
-    buttons.forEach(btn => btn.classList.remove("active"));
-
+    buttons.forEach((btn) => btn.classList.remove("active"));
 };
 
-
-// =======================
-// Load all issues from API
-// =======================
+// load all issues
 const loadIssues = async () => {
+    manageSpinner(true);
 
-    manageSpinner(true); // start loading
-
-    const res = await fetch("https://phi-lab-server.vercel.app/api/v1/lab/issues");
-
+    const res = await fetch(
+        "https://phi-lab-server.vercel.app/api/v1/lab/issues",
+    );
     const data = await res.json();
 
-    // store all issues
     allIssues = data.data;
 
-    updateCounts(); // update issue numbers
+    updateCounts();
 
-    displayIssues(allIssues); // show all issues
+    displayIssues(allIssues);
 
-    manageSpinner(false); // stop loading
-
+    manageSpinner(false);
 };
 
-
-// =======================
-// Update issue counts
-// =======================
+// update issue counts
 const updateCounts = () => {
-
-    const openIssues = allIssues.filter(issue => issue.status === "open");
-
-    const closeIssues = allIssues.filter(issue => issue.status === "closed");
+    const openIssues = allIssues.filter((issue) => issue.status === "open");
+    const closeIssues = allIssues.filter((issue) => issue.status === "closed");
 
     document.getElementById("count-all").innerText = allIssues.length;
-
     document.getElementById("count-open").innerText = openIssues.length;
-
     document.getElementById("count-close").innerText = closeIssues.length;
-
 };
 
-
-// =======================
-// Display Issues as Cards
-// =======================
+// display issues
 const displayIssues = (issues) => {
-
     const container = document.getElementById("issue-container");
 
     container.innerHTML = "";
 
-    // if no issue found
-    if (issues.length === 0) {
+    document.getElementById("count-all").innerText = issues.length;
 
+    if (issues.length === 0) {
         container.innerHTML = `
         <div class="text-center col-span-full py-10">
         <h2 class="text-2xl font-bold">No Issue Found</h2>
@@ -96,70 +66,62 @@ const displayIssues = (issues) => {
         return;
     }
 
-    // create card for each issue
-    issues.forEach(issue => {
 
+    issues.forEach((issue) => {
         const card = document.createElement("div");
 
-        // border color for open issues
-        const borderColor = issue.status === "open"
-            ? "border-green-500"
-            : "border-gray-300";
+        const borderColor =
+            issue.status === "open" ? "border-green-500" : "text-fuchsia-700";
 
-        // title color for closed issues
-        const titleColor = issue.status === "closed"
-            ? "text-fuchsia-700"
-            : "text-gray-800";
+        const titleColor =
+            issue.status === "closed" ? "text-black" : "text-gray-800";
 
-        // show different image based on status
         const statusImage = issue.status === "open"
-            ? "Open-Status.png"
-            : "close.png";
+            ? "../assets/Open-Status.png"
+            : "../assets/Closed- Status .png";
 
+        const statusBadge =
+            issue.priority === "high"
+                ? `<span class="bg-red-100 text-red-600 px-3 py-1 rounded-full text-[18px] font-semibold">HIGH</span>`
+                : issue.priority === "medium"
+                    ? `<span class="bg-yellow-100 text-yellow-600 px-3 py-1 rounded-full text-[18px] font-semibold">MEDIUM</span>`
+                    : `<span class="bg-gray-100 text-gray-400 p-3 py-1 rounded-full  text-[18px] font-semibold">LOW</span>`;
 
         card.innerHTML = `
-
+        
         <div onclick="loadSingleIssue(${issue.id})"
         class="cursor-pointer bg-white rounded-xl shadow-md border-t-4 ${borderColor} p-6 space-y-4 hover:shadow-lg transition">
 
             <div class="flex justify-between items-center">
 
-                <!-- status image -->
                 <div class="w-12 h-12">
                     <img src="./images/${statusImage}" class="w-full h-full object-contain">
                 </div>
 
-                <!-- priority badge -->
-                <div class="bg-red-100 text-red-500 px-5 py-2 rounded-full font-semibold">
-                HIGH
-                </div>
+                ${statusBadge}
 
             </div>
 
-            <!-- issue title -->
             <h2 class="text-2xl font-semibold ${titleColor}">
             ${issue.title}
             </h2>
 
-            <!-- issue description -->
             <p class="text-gray-500">
             ${issue.description}
             </p>
 
-            <!-- tags -->
             <div class="flex gap-3">
 
             <span class="px-4 py-2 rounded-full bg-red-100 text-red-500 font-medium">
-            BUG
+            <i class="fa-solid fa-bug text-[14px]"></i> BUG
             </span>
 
             <span class="px-4 py-2 rounded-full bg-yellow-100 text-yellow-600 font-medium">
-            HELP WANTED
+            <i class="fa-solid fa-atom text-[18px]"></i> HELP WANTED
             </span>
 
             </div>
 
-            <!-- issue info -->
             <div class="border-t pt-4 text-gray-500 flex flex-col gap-1">
 
             <p>#${issue.id} by john_doe</p>
@@ -169,99 +131,134 @@ const displayIssues = (issues) => {
             </div>
 
         </div>
-
+        
         `;
 
         container.append(card);
-
     });
-
 };
 
-
-// =======================
-// Filter ALL issues
-// =======================
+// filter all
 document.getElementById("btn-all").addEventListener("click", () => {
-
     removeActive();
 
     document.getElementById("btn-all").classList.add("active");
 
     displayIssues(allIssues);
-
 });
 
-
-// =======================
-// Filter OPEN issues
-// =======================
+// filter open
 document.getElementById("btn-open").addEventListener("click", () => {
-
     removeActive();
 
     document.getElementById("btn-open").classList.add("active");
 
-    const openIssues = allIssues.filter(issue => issue.status === "open");
+    const openIssues = allIssues.filter((issue) => issue.status === "open");
 
     displayIssues(openIssues);
-
 });
 
-
-// =======================
-// Filter CLOSED issues
-// =======================
+// filter close
 document.getElementById("btn-close").addEventListener("click", () => {
-
     removeActive();
 
     document.getElementById("btn-close").classList.add("active");
 
-    const closeIssues = allIssues.filter(issue => issue.status === "closed");
+    const closeIssues = allIssues.filter((issue) => issue.status === "closed");
 
     displayIssues(closeIssues);
-
 });
 
-
-// =======================
-// Load Single Issue Modal
-// =======================
+// load single issue
 const loadSingleIssue = async (id) => {
-
     const url = `https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`;
 
     const res = await fetch(url);
-
     const data = await res.json();
-
     const issue = data.data;
 
     const detailsBox = document.getElementById("details-container");
 
-    // show issue details in modal
+    const statusColor =
+        issue.status === "open" ? "text-green-800" : "text-gray-600";
+
     detailsBox.innerHTML = `
 
-    <h2 class="text-2xl font-bold mb-3">${issue.title}</h2>
+    <div class="min-w-15/16 mx-auto m-8 ">
 
-    <p class="mb-4">${issue.description}</p>
+        <!-- Close Button -->
+        <button 
+        onclick="document.getElementById('issue_modal').close()"
+        class="absolute top-4 right-4 btn btn-soft btn-error text-lg">
+        x
+        </button>
 
-    <p class="font-semibold">Status : ${issue.status}</p>
+        
+        <h2 class="text-xl font-semibold mb-6 mt-4">
+        ${issue.title}
+        </h2>
+        
+        <div class="flex gap-[6px] items-center  flex-wrap">
+        
+        <p class="text-base rounded-full bg-green-300 py-1 px-5 flex items-center justify-center font-semibold ${statusColor}">
+        ${issue.status}
+        </p>
+        
+        <p class="text-[4px]  text-gray-400"><i class="fa-solid fa-circle"></i></p>
+        
+        <p class="text-base font-semibold text-[14px] text-gray-400">
+        Opened by Fahim Ahmed
+        </p>
+        
+        <p class="text-[4px] text-gray-400"><i class="fa-solid fa-circle"></i></p>
+        
+        <p class="text-base font-semibold text-[14px] text-gray-400">
+        22/02/2026
+        </p>
+        
+        </div>
+
+        <div class="flex gap-3 py-6 ">
+
+            <span class="px-4 py-1 rounded-full bg-red-100 text-[14px] text-red-500 font-light">
+            <i class="fa-solid fa-bug text-[14px]"></i> BUG
+            </span>
+
+            <span class="px-3 py-1 rounded-full bg-yellow-100 text-[14px] text-yellow-600 font-light">
+            <i class="fa-solid fa-atom text-[18px]"></i> HELP WANTED
+            </span>
+
+        </div>
+
+        <p class="mb-6 text-gray-600 text-lg leading-relaxed">
+        ${issue.description}
+        </p>
+
+        <div class="flex justify-between bg-gray-100 p-6 rounded-lg">
+
+            <div>
+                <p class="text-gray-500 text-sm">Assignee:</p>
+                <p class="font-semibold text-lg">Fahim Ahmed</p>
+            </div>
+
+            <div>
+                <p class="text-gray-500 text-sm">Priority:</p>
+                <span class="bg-red-500 text-white px-3 py-1 rounded-full text-sm">
+                HIGH
+                </span>
+            </div>
+
+        </div>
+
+    </div>
 
     `;
 
-    // open modal
     document.getElementById("issue_modal").showModal();
-
 };
 
-
-// =======================
-// Search Issue
-// =======================
+// search issue
 document.getElementById("btn-search").addEventListener("click", async () => {
-
     const input = document.getElementById("input-search");
 
     const value = input.value.trim();
@@ -273,11 +270,7 @@ document.getElementById("btn-search").addEventListener("click", async () => {
     const data = await res.json();
 
     displayIssues(data.data);
-
 });
 
-
-// =======================
-// Initial Load
-// =======================
+// initial load
 loadIssues();
